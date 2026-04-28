@@ -1,0 +1,91 @@
+
+<div style="padding: 1rem 0;">
+  <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Magistrados — semana del 21 al 27 de abril</div>
+  <div style="display: flex; gap: 16px; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary);">
+      <span style="width: 10px; height: 10px; border-radius: 2px; background: #E24B4A;"></span>En lista de jubilados (Transparencia Venezuela)
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary);">
+      <span style="width: 10px; height: 10px; border-radius: 2px; background: #B5D4F4;"></span>Otros magistrados
+    </span>
+  </div>
+  <div style="position: relative; width: 100%; height: 420px;">
+    <canvas id="chartMag" role="img" aria-label="Gráfico de barras horizontales con los magistrados del TSJ ordenados por número de sentencias. Los magistrados en rojo aparecen en la lista de próximos jubilados según Transparencia Venezuela.">Sentencias por magistrado: Carmen Alves Navas 43 (jubilada), José Luis Gutiérrez Parra 38, Henry Timaure Tapia 32 (jubilado), Carmen Castro Gilly 20, Maikel Moreno 20 (jubilado), Elsa Gómez Moreno 17 (jubilada), Eneida Moreno Perez 15, Malaquías Gil Rodríguez 12 (jubilado), Juan Carlos Hidalgo Pandares 11 (jubilado), Elias Bittar Escalona 10, Emilio Ramos González 9.</canvas>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const jubilados = ['Carmen Eneida Alves Navas', 'Henry José Timaure Tapia', 'Maikel José Moreno Pérez', 'Elsa Janeth Gómez Moreno', 'Malaquías Gil Rodríguez', 'Juan Carlos Hidalgo Pandares'];
+const labels = [
+  'Carmen Alves Navas',
+  'José Luis Gutiérrez Parra',
+  'Henry Timaure Tapia',
+  'Carmen Castro Gilly',
+  'Maikel Moreno Pérez',
+  'Elsa Gómez Moreno',
+  'Eneida Moreno Pérez',
+  'Malaquías Gil Rodríguez',
+  'Juan C. Hidalgo Pandares',
+  'Elias Bittar Escalona',
+  'Emilio Ramos González'
+];
+const fullNames = [
+  'Carmen Eneida Alves Navas',
+  '',
+  'Henry José Timaure Tapia',
+  '',
+  'Maikel José Moreno Pérez',
+  'Elsa Janeth Gómez Moreno',
+  '',
+  'Malaquías Gil Rodríguez',
+  'Juan Carlos Hidalgo Pandares',
+  '',
+  ''
+];
+const data = [43, 38, 32, 20, 20, 17, 15, 12, 11, 10, 9];
+const colors = fullNames.map(n => jubilados.includes(n) ? '#E24B4A' : '#B5D4F4');
+const borders = fullNames.map(n => jubilados.includes(n) ? '#A32D2D' : '#378ADD');
+
+const ctx2 = document.getElementById('chartMag');
+new Chart(ctx2, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Sentencias',
+      data: data,
+      backgroundColor: colors,
+      borderColor: borders,
+      borderWidth: 1,
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ` ${ctx.parsed.x} sentencias`
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        grid: { color: 'rgba(128,128,128,0.1)' },
+        ticks: { font: { size: 11 }, color: '#888' }
+      },
+      y: {
+        grid: { display: false },
+        ticks: {
+          font: { size: 12 },
+          color: (ctx) => jubilados.includes(fullNames[ctx.index]) ? '#A32D2D' : '#888'
+        }
+      }
+    }
+  }
+});
+</script>
